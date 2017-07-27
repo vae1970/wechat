@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.vae.wechat.dao.IFileClassDao">
+	<resultMap id="FileClass" type="com.vae.wechat.model.FileClass">
+		<id column="Id" property="id" jdbcType="INTEGER" />
+		<id column="ParentClassID" property="parentClassID" jdbcType="VARCHAR" />
+		<id column="ParentClassName" property="parentClassName" jdbcType="VARCHAR" />
+		<id column="ClassName" property="className" jdbcType="VARCHAR" />
+		<id column="Remark" property="remark" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<!-- 获取列表记录数 -->
+	<select id="getListCount" resultType="int" parameterType="string">
+		select count(*) from file_class g
+		where 1=1
+		<if test="#{0}!=null and #{0}!=''"> and g.ClassName LIKE CONCAT('%',#{0},'%' ) </if>
+	</select>
+
+	<!-- 获取分页列表集合信息  -->
+	<select id="getList" resultMap="FileClass" parameterType="string">
+		select g.*,b.className as parentClassName
+		from file_class g
+		LEFT JOIN file_class B ON g.parentClassID = B.id
+		where 1=1
+		<if test="#{0}!=null and #{0}!=''"> and g.ClassName LIKE CONCAT('%',#{0},'%' ) </if>
+	</select>
+
+	<select id="getAllList" resultMap="FileClass">
+		SELECT
+			g.ID, g.ParentClassID, b.ClassName AS ParentClassName, g.ClassName, g.Remark
+		FROM
+			file_class g
+		LEFT JOIN file_class b ON g.parentClassID = b.id
+	</select>
+
+	<!-- 根据指定id获取信息 -->
+	<select id="load" resultMap="FileClass" parameterType="int">
+		select g.*,b.className as parentClassName
+		from file_class g
+		LEFT JOIN file_class B ON g.parentClassID = B.id
+		where g.id = #{id}
+	</select>
+
+	<!-- 添加 -->
+	<insert id="add" parameterType="com.vae.wechat.model.FileClass">
+		insert into file_class(ClassName,ParentClassID,Remark) values (#{className},#{parentClassID},#{remark})
+	</insert>
+	
+	<!-- 更新 -->
+	<update id="update" parameterType="com.vae.wechat.model.FileClass">
+		update file_class g
+		set g.ClassName=#{className},
+			g.ParentClassID=#{parentClassID},
+			 g.Remark=#{remark}
+		where g.id = #{id}
+	</update>
+	
+
+
+	<!-- 检查是否是父节点 -->
+	<select id="checkFileClassIsParent" resultMap="FileClass">
+		SELECT *
+		FROM file_class d
+		WHERE d.parentClassID = #{id}
+	</select>
+
+	<!-- 根据父id获取全部子节点 -->
+	<select id="getListByParentClassId" resultMap="FileClass">
+		select g.*
+		from file_class g
+		WHERE g.parentClassID = #{parentClassId}
+	</select>
+
+	<!-- 根据父id获取全部子节点 -->
+	<select id="getFileClassIdByParentClassName" resultType="int" parameterType="string">
+		SELECT ID
+		FROM file_class
+		WHERE ClassName = #{className}
+	</select>
+	<!--  -->
+	<select id="getListByType" resultMap="FileClass">
+		SELECT
+			a.ID,
+			a.ParentClassID,
+			b.ClassName AS ParentClassName,
+			a.ClassName,
+			a.Remark
+		FROM
+			file_class a
+		LEFT JOIN file_class b ON a.parentClassID = b.id
+		LEFT JOIN file_class c ON b.parentClassID = c.id
+		LEFT JOIN file_class d ON c.parentClassID = d.id
+		LEFT JOIN file_class e ON d.parentClassID = e.id
+		LEFT JOIN file_class f ON e.parentClassID = f.id
+		LEFT JOIN file_class g ON f.parentClassID = g.id
+		<where>
+			<choose>
+				<when test="archiveType == 'ht' ">
+					(SELECT ID FROM file_class WHERE ClassName = '合同管理') IN (a.ID, b.ID, c.ID, d.ID, e.ID, f.ID, g.ID)
+				</when>
+				<when test="archiveType == 'zd' ">
+					(SELECT ID FROM file_class WHERE ClassName = '制度管理') IN (a.ID, b.ID, c.ID, d.ID, e.ID, f.ID, g.ID)
+				</when>
+				<when test="archiveType == 'tz' ">
+					(SELECT ID FROM file_class WHERE ClassName = '图纸管理') IN (a.ID, b.ID, c.ID, d.ID, e.ID, f.ID, g.ID)
+				</when>
+				<otherwise>
+				</otherwise>
+			</choose>
+		</where>
+	</select>
+</mapper>

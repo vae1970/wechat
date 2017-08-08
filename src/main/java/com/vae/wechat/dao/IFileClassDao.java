@@ -1,14 +1,11 @@
 package com.vae.wechat.dao;
 
-import com.vae.wechat.config.MyMapper;
 import com.vae.wechat.model.FileClass;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
-@Mapper
-public interface IFileClassDao extends MyMapper<FileClass> {
+public interface IFileClassDao {
 
 	/**
 	 * 获取文档分类总数信息

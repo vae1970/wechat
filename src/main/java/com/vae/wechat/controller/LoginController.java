@@ -1,6 +1,7 @@
 package com.vae.wechat.controller;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.vae.wechat.dao.IFileClassDao;
 import com.vae.wechat.model.FileClass;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +19,12 @@ public class LoginController {
 
     @GetMapping("/login")
     @ResponseBody
-    public String login(){
+    public Object login(){
         List<FileClass> list = iFileClassDao.getListByType("ht");
 //        JSONArray jsonArray = JSONArray.par
-        return JSONArray.toJSONString(list);
+        JSONObject object = new JSONObject();
+        object.put("key","value");
+//        return JSONArray.toJSONString(list);
+        return object;
     }
 }

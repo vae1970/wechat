@@ -13,9 +13,9 @@ import java.util.Date;
 @Aspect
 public class LogAspect {
 
-    @After("execution(* com.vae.wechat.controller.*.*(..))")
-    public void login (){
-        System.out.println("log login");
+    @After("execution(* com.vae.wechat.controller.LoginController.login(int,String)) && args(number,string)")
+    public void login (int number,String string){
+        System.out.println("log login" + number + "   " + string);
     }
 
     @Around("execution(* com.vae.wechat.dao.*.*(..))")

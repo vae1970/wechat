@@ -23,22 +23,59 @@ class SequenceThread extends Thread {
     public void run(){
         int num=sequence.getNext();
         this.started=true;
-        while(num<101){
+        while(num<11){
             if(num%4==order){
-                System.out.println(getName()+":"+num);
+                System.out.printf(getName() + ":" + num);
                 if(this.next.started){
+//                    try {
+//                        Thread.sleep(1000);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
                     synchronized (this.next) {
                         this.next.notify();
-                    }}else{
+                        System.out.println("\t\t\t"+ this.getName() + " this.next.notify();");
+                    }
+                }else{
                     this.next.start();
+                    System.out.println("\t\t\t"+ this.getName() + " this.next.start();");
                 }
+                System.out.println("be   " + getName() + ":" + num);
+//                if(num%4==1){
+//                    try {
+//                        Thread.sleep(4000);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                } else if(num%4==2){
+//                    try {
+//                        Thread.sleep(3000);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                } else if(num%4==3){
+//                    try {
+//                        Thread.sleep(2000);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                } else if(num%4==0){
+//                    try {
+//                        Thread.sleep(1000);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
                 try {
                     synchronized (this) {
                         this.wait();
+                        System.out.println("\t\t\t"+ this.getName() + " this.wait();");
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                    System.out.println("\t\t\t"+ this.getName() + " e.printStackTrace();");
                 }
+                System.out.println("af   " + getName() + ":" + num);
                 num=sequence.getNext();
             }
             //

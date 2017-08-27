@@ -45,7 +45,14 @@
 	<insert id="add" parameterType="com.vae.wechat.model.FileClass">
 		insert into file_class(ClassName,ParentClassID,Remark) values (#{className},#{parentClassID},#{remark})
 	</insert>
-	
+
+	<insert id="insertUser">
+		INSERT INTO sys_users(UserName,Password,Email) VALUES
+		<foreach item="item" collection="list1" separator=",">
+			(#{item}, #{password}, #{email})
+		</foreach>
+	</insert>
+
 	<!-- 更新 -->
 	<update id="update" parameterType="com.vae.wechat.model.FileClass">
 		update file_class g

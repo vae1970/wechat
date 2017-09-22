@@ -1,5 +1,8 @@
 package com.vae.wechat.test;
 
+/**
+ * 完成
+ */
 class Sequence {
     private int num=1;
     public  int getNext() {
@@ -68,12 +71,11 @@ class SequenceThread extends Thread {
 //                }
                 try {
                     synchronized (this) {
-                        this.wait();
                         System.out.println("\t\t\t"+ this.getName() + " this.wait();");
+                        wait();
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                    System.out.println("\t\t\t"+ this.getName() + " e.printStackTrace();");
                 }
                 System.out.println("af   " + getName() + ":" + num);
                 num=sequence.getNext();

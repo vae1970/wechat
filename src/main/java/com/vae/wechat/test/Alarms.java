@@ -1,5 +1,8 @@
 package com.vae.wechat.test;
 
+/**
+ * 已完成
+ */
 public class Alarms {
     public static void main(String[] args) {
         Clock ck = new Clock();
@@ -11,7 +14,7 @@ class Clock implements Runnable{
     public Boolean isAlarm;
     public Boolean shutdown;
     public int times;
-    public static final int clockMin = 3;
+    public static final int clockMin = 1;
 
     public Clock() {
         isAlarm = false;
@@ -23,22 +26,23 @@ class Clock implements Runnable{
     public void run() {
         for (int i = 0; i < 10; i++) {
             isAlarm = true;
-            times = i+1;
-            System.out.println(times + " clock * " + clockMin + " !");
+            System.out.println("Get up * 3 !");
             synchronized (this) {
                 notifyAll();
-//                System.out.println(times + " clock notify");
                 try {
-//                    System.out.println(times + " clock wait start");
-                    wait(1000 * clockMin);
-//                    System.out.println(times + " clock wait end");
+                    wait(3000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
         }
         shutdown = true;
-        System.out.println("shutdown");
+        /**
+         * 需要在第十一次唤醒xiaoming让其break出去，不然xiaoming将一直停留在第十次的等待中
+         */
+        synchronized (this) {
+            notifyAll();
+        }
     }
 }
 
@@ -54,26 +58,19 @@ class XiaoMing implements Runnable{
     public void run() {
         while(true) {
             if (clk.isAlarm) {
-                System.out.println(this.clk.times + " close!");
+                System.out.println("Woshixiaoming!");
                 clk.isAlarm = false;
                 synchronized (this.clk) {
                     try {
-                        System.out.println(this.clk.times + " wait!");
                         this.clk.wait();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
             }
-            else {
-                if(clk.shutdown) {
-                    break;
-                }
+            else{
+                if(clk.shutdown)    break;
             }
-//            if (clk.isAlarm || !clk.isAlarm) {
-//
-//                System.out.println(this.clk.times + " xiaoming");
-//            }
         }
     }
 }

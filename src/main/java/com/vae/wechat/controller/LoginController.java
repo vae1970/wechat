@@ -25,6 +25,8 @@ public class LoginController {
         JSONObject object = new JSONObject();
         object.put("key","value");
 //        return JSONArray.toJSONString(list);
+        String a = "asd";
+        System.out.println(a.hashCode());
         return object;
     }
 }

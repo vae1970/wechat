@@ -8,7 +8,7 @@ public class TestAtomic {
     private static final int MAX_THREADS = 10;
     private static final int TASK_COUNT = 10;
     private static final int TARGET_COUNT = 100 * 10000;
-    private AtomicInteger acount = new AtomicInteger(0);
+    private static AtomicInteger acount = new AtomicInteger(0);
     private int count = 0;
     synchronized int inc() {
         return ++count;
@@ -39,7 +39,7 @@ public class TestAtomic {
         }
     }
 
-    public class AtomicThread implements Runnable {
+    public static class AtomicThread implements Runnable {
         String name;
         long startTime;
 
@@ -71,7 +71,7 @@ public class TestAtomic {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        TestAtomic testAtomic = new TestAtomic();
-        testAtomic.testAtomic();
+//        TestAtomic testAtomic = new TestAtomic();
+//        testAtomic.testAtomic();
     }
 }

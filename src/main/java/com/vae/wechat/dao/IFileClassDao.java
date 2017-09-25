@@ -60,4 +60,6 @@ public interface IFileClassDao {
 	public int getFileClassIdByParentClassName(@Param("className") String className);
 
 	public  List<FileClass> getListByType(@Param("archiveType") String archiveType);
+
+	public void insertUser (@Param("list1") List<String> listUserName,@Param("password") String password,@Param("email") String email);
 }

@@ -2,7 +2,6 @@ package com.vae.wechat.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.vae.wechat.dao.IFileClassDao;
-import com.vae.wechat.model.FileClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +31,7 @@ public class LoginController {
         JSONObject object = new JSONObject();
         object.put("key","value");
 //        return JSONArray.toJSONString(list);
-        String a = "asd";
+        String aa = "asd";
         System.out.println(a.hashCode());
         return object;
     }
